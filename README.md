@@ -16,20 +16,8 @@ Each choice you make affects:
 - Public Opinion
 
 ## How to Play
-
-### Local Installation
-1. Make sure you have Python 3.6 or higher installed
-2. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
-3. Run the game:
-   ```
-   streamlit run app.py
-   ```
-
 ### Play Online
-The game is also available to play online at [Streamlit Community Cloud](https://share.streamlit.io/your-username/cold-war-simulator/main/app.py)
+The game is available to play online at [Streamlit Community Cloud](https://world-choice-projectgit-k4nh83yxpdqbmphblmnylw.streamlit.app/)
 
 ## Game Rules
 
