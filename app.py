@@ -324,7 +324,10 @@ def main():
             
             if check_end_conditions() or st.session_state.game_over:
                 if st.button("Play Again"):
-                    # Reset game state
+                    # Reset all game state variables
+                    for key in st.session_state.keys():
+                        del st.session_state[key]
+                    # Reinitialize the game state
                     st.session_state.diplomatic_points = 10
                     st.session_state.global_tension = 20
                     st.session_state.public_opinion = 50
@@ -337,6 +340,7 @@ def main():
                     }
                     st.session_state.game_over = False
                     st.session_state.current_scenario = None
+                    st.session_state.last_event = None
                     st.rerun()
             else:
                 st.rerun()
