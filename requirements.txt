@@ -1,0 +1,3 @@
+# No external dependencies required for this game
+# Python 3.6+ is recommended 
+streamlit==1.32.0 
