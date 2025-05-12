@@ -24,6 +24,22 @@ if 'current_scenario' not in st.session_state:
 if 'last_event' not in st.session_state:
     st.session_state.last_event = None
 
+def reset_game():
+    """Reset all game state variables"""
+    st.session_state.diplomatic_points = 10
+    st.session_state.global_tension = 20
+    st.session_state.public_opinion = 50
+    st.session_state.turn = 1
+    st.session_state.story_progress = {
+        "european_crisis": False,
+        "berlin_crisis": False,
+        "cuban_crisis": False,
+        "vietnam_crisis": False
+    }
+    st.session_state.game_over = False
+    st.session_state.current_scenario = None
+    st.session_state.last_event = None
+
 def show_introduction():
     st.title("🌍 Cold War Diplomacy Simulator")
     
@@ -288,6 +304,7 @@ def main():
     if not st.session_state.current_scenario:
         show_introduction()
         if st.button("Start Game"):
+            reset_game()  # Reset all game state before starting
             st.session_state.current_scenario = get_current_scenario()
             st.rerun()
     else:
@@ -323,27 +340,18 @@ def main():
             st.session_state.current_scenario = get_current_scenario()
             
             if check_end_conditions() or st.session_state.game_over:
-                if st.button("Play Again"):
-                    # Reset all game state variables
-                    for key in st.session_state.keys():
-                        del st.session_state[key]
-                    # Reinitialize the game state
-                    st.session_state.diplomatic_points = 10
-                    st.session_state.global_tension = 20
-                    st.session_state.public_opinion = 50
-                    st.session_state.turn = 1
-                    st.session_state.story_progress = {
-                        "european_crisis": False,
-                        "berlin_crisis": False,
-                        "cuban_crisis": False,
-                        "vietnam_crisis": False
-                    }
-                    st.session_state.game_over = False
-                    st.session_state.current_scenario = None
-                    st.session_state.last_event = None
-                    st.rerun()
+                st.session_state.game_over = True
+                st.rerun()
             else:
+                st.rerun()
+        
+        # Show Return Home button if game is over
+        if st.session_state.game_over:
+            st.markdown("### Game Over!")
+            st.markdown("Your decisions have led to this outcome. The Cold War continues, but your leadership has ended.")
+            if st.button("Return Home"):
+                st.session_state.current_scenario = None
                 st.rerun()
 
 if __name__ == "__main__":
-    main() 
+    main()
