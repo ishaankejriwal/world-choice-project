@@ -23,6 +23,10 @@ if 'current_scenario' not in st.session_state:
     st.session_state.current_scenario = None
 if 'last_event' not in st.session_state:
     st.session_state.last_event = None
+if 'last_success_message' not in st.session_state:
+    st.session_state.last_success_message = None
+if 'last_info_messages' not in st.session_state:
+    st.session_state.last_info_messages = []
 
 def reset_game():
     """Reset all game state variables"""
@@ -39,6 +43,8 @@ def reset_game():
     st.session_state.game_over = False
     st.session_state.current_scenario = None
     st.session_state.last_event = None
+    st.session_state.last_success_message = None
+    st.session_state.last_info_messages = []
 
 def show_introduction():
     st.title("🌍 Cold War Diplomacy Simulator")
@@ -149,32 +155,44 @@ def check_end_conditions():
     return False
 
 def process_choice(choice, scenario):
+    # Clear previous messages
+    st.session_state.last_success_message = None
+    st.session_state.last_info_messages = []
+    
     if scenario["next_scenario"] == "european_crisis":
         if choice == 0:  # Marshall Plan
             st.session_state.diplomatic_points -= 2
             st.session_state.global_tension -= 5
             st.session_state.public_opinion += 5
-            st.success("You implemented the Marshall Plan!")
-            st.info("This massive economic aid program helps rebuild Europe and contain communism.")
-            st.info("The Soviet Union views this as a direct challenge to their influence.")
+            st.session_state.last_success_message = "You implemented the Marshall Plan!"
+            st.session_state.last_info_messages = [
+                "This massive economic aid program helps rebuild Europe and contain communism.",
+                "The Soviet Union views this as a direct challenge to their influence."
+            ]
         elif choice == 1:  # Military bases
             st.session_state.diplomatic_points -= 3
             st.session_state.global_tension += 10
-            st.success("You established military bases!")
-            st.info("This shows strength but increases tensions with the Soviet Union.")
-            st.info("The Soviets respond by strengthening their own military presence.")
+            st.session_state.last_success_message = "You established military bases!"
+            st.session_state.last_info_messages = [
+                "This shows strength but increases tensions with the Soviet Union.",
+                "The Soviets respond by strengthening their own military presence."
+            ]
         elif choice == 2:  # Nuclear weapons
             st.session_state.diplomatic_points -= 4
             st.session_state.global_tension += 15
-            st.success("You began nuclear weapons development!")
-            st.info("This escalates the arms race significantly.")
-            st.info("The Soviet Union accelerates their own nuclear program in response.")
+            st.session_state.last_success_message = "You began nuclear weapons development!"
+            st.session_state.last_info_messages = [
+                "This escalates the arms race significantly.",
+                "The Soviet Union accelerates their own nuclear program in response."
+            ]
         elif choice == 3:  # Domestic stability
             st.session_state.diplomatic_points += 2
             st.session_state.public_opinion += 10
-            st.success("You focused on domestic stability!")
-            st.info("This improves your nation's internal situation.")
-            st.info("However, the Soviet Union sees this as a sign of weakness.")
+            st.session_state.last_success_message = "You focused on domestic stability!"
+            st.session_state.last_info_messages = [
+                "This improves your nation's internal situation.",
+                "However, the Soviet Union sees this as a sign of weakness."
+            ]
         
         st.session_state.story_progress["european_crisis"] = True
     
@@ -183,27 +201,35 @@ def process_choice(choice, scenario):
             st.session_state.diplomatic_points -= 3
             st.session_state.global_tension -= 5
             st.session_state.public_opinion += 15
-            st.success("You launched the Berlin Airlift!")
-            st.info("This humanitarian effort saves West Berlin and wins global support.")
-            st.info("The Soviet Union is forced to back down, but tensions remain high.")
+            st.session_state.last_success_message = "You launched the Berlin Airlift!"
+            st.session_state.last_info_messages = [
+                "This humanitarian effort saves West Berlin and wins global support.",
+                "The Soviet Union is forced to back down, but tensions remain high."
+            ]
         elif choice == 1:  # Military convoys
             st.session_state.diplomatic_points -= 4
             st.session_state.global_tension += 20
-            st.success("You sent military convoys!")
-            st.info("This risks direct confrontation with Soviet forces.")
-            st.info("The situation becomes increasingly volatile.")
+            st.session_state.last_success_message = "You sent military convoys!"
+            st.session_state.last_info_messages = [
+                "This risks direct confrontation with Soviet forces.",
+                "The situation becomes increasingly volatile."
+            ]
         elif choice == 2:  # Negotiate
             st.session_state.diplomatic_points -= 2
             st.session_state.global_tension -= 10
-            st.success("You chose to negotiate!")
-            st.info("This reduces tensions but may be seen as weakness.")
-            st.info("The Soviet Union becomes more aggressive in other regions.")
+            st.session_state.last_success_message = "You chose to negotiate!"
+            st.session_state.last_info_messages = [
+                "This reduces tensions but may be seen as weakness.",
+                "The Soviet Union becomes more aggressive in other regions."
+            ]
         elif choice == 3:  # Evacuate
             st.session_state.diplomatic_points -= 1
             st.session_state.public_opinion -= 20
-            st.success("You evacuated West Berlin!")
-            st.info("This is seen as a major defeat in the Cold War.")
-            st.info("Your allies begin to question your commitment.")
+            st.session_state.last_success_message = "You evacuated West Berlin!"
+            st.session_state.last_info_messages = [
+                "This is seen as a major defeat in the Cold War.",
+                "Your allies begin to question your commitment."
+            ]
         
         st.session_state.story_progress["berlin_crisis"] = True
     
@@ -211,27 +237,35 @@ def process_choice(choice, scenario):
         if choice == 0:  # Quarantine
             st.session_state.diplomatic_points -= 3
             st.session_state.global_tension += 10
-            st.success("You imposed a naval quarantine!")
-            st.info("This shows resolve but risks confrontation.")
-            st.info("The Soviet Union sends more ships to challenge the blockade.")
+            st.session_state.last_success_message = "You imposed a naval quarantine!"
+            st.session_state.last_info_messages = [
+                "This shows resolve but risks confrontation.",
+                "The Soviet Union sends more ships to challenge the blockade."
+            ]
         elif choice == 1:  # Airstrikes
             st.session_state.diplomatic_points -= 4
             st.session_state.global_tension += 30
-            st.success("You launched airstrikes!")
-            st.info("This could trigger nuclear war!")
-            st.info("The world holds its breath as the situation escalates.")
+            st.session_state.last_success_message = "You launched airstrikes!"
+            st.session_state.last_info_messages = [
+                "This could trigger nuclear war!",
+                "The world holds its breath as the situation escalates."
+            ]
         elif choice == 2:  # Remove missiles
             st.session_state.diplomatic_points -= 2
             st.session_state.global_tension -= 15
-            st.success("You offered to remove missiles from Turkey!")
-            st.info("This diplomatic solution reduces tensions.")
-            st.info("Both sides begin to de-escalate the crisis.")
+            st.session_state.last_success_message = "You offered to remove missiles from Turkey!"
+            st.session_state.last_info_messages = [
+                "This diplomatic solution reduces tensions.",
+                "Both sides begin to de-escalate the crisis."
+            ]
         elif choice == 3:  # Demand withdrawal
             st.session_state.diplomatic_points -= 1
             st.session_state.global_tension += 20
-            st.success("You demanded immediate withdrawal!")
-            st.info("This ultimatum increases tensions significantly.")
-            st.info("The Soviet Union refuses to back down.")
+            st.session_state.last_success_message = "You demanded immediate withdrawal!"
+            st.session_state.last_info_messages = [
+                "This ultimatum increases tensions significantly.",
+                "The Soviet Union refuses to back down."
+            ]
         
         st.session_state.story_progress["cuban_crisis"] = True
     
@@ -240,30 +274,38 @@ def process_choice(choice, scenario):
             st.session_state.diplomatic_points -= 3
             st.session_state.global_tension += 15
             st.session_state.public_opinion -= 10
-            st.success("You increased military support!")
-            st.info("This escalates the conflict further.")
-            st.info("The war becomes increasingly unpopular at home.")
+            st.session_state.last_success_message = "You increased military support!"
+            st.session_state.last_info_messages = [
+                "This escalates the conflict further.",
+                "The war becomes increasingly unpopular at home."
+            ]
         elif choice == 1:  # Peace negotiations
             st.session_state.diplomatic_points -= 2
             st.session_state.global_tension -= 10
             st.session_state.public_opinion += 5
-            st.success("You began peace negotiations!")
-            st.info("This shows willingness to resolve the conflict.")
-            st.info("The path to peace is long and difficult.")
+            st.session_state.last_success_message = "You began peace negotiations!"
+            st.session_state.last_info_messages = [
+                "This shows willingness to resolve the conflict.",
+                "The path to peace is long and difficult."
+            ]
         elif choice == 2:  # Withdraw
             st.session_state.diplomatic_points -= 1
             st.session_state.global_tension -= 5
             st.session_state.public_opinion -= 15
-            st.success("You withdrew all forces!")
-            st.info("This is seen as a major defeat.")
-            st.info("Your global standing is significantly weakened.")
+            st.session_state.last_success_message = "You withdrew all forces!"
+            st.session_state.last_info_messages = [
+                "This is seen as a major defeat.",
+                "Your global standing is significantly weakened."
+            ]
         elif choice == 3:  # Major offensive
             st.session_state.diplomatic_points -= 4
             st.session_state.global_tension += 20
             st.session_state.public_opinion -= 20
-            st.success("You launched a major offensive!")
-            st.info("This escalates the conflict dramatically.")
-            st.info("The war becomes increasingly brutal and costly.")
+            st.session_state.last_success_message = "You launched a major offensive!"
+            st.session_state.last_info_messages = [
+                "This escalates the conflict dramatically.",
+                "The war becomes increasingly brutal and costly."
+            ]
         
         st.session_state.story_progress["vietnam_crisis"] = True
     
@@ -272,32 +314,40 @@ def process_choice(choice, scenario):
             st.session_state.diplomatic_points -= 5
             st.session_state.global_tension += 25
             st.session_state.public_opinion -= 20
-            st.success("You chose to escalate the conflict!")
-            st.info("This decision will have far-reaching consequences.")
-            st.info("The world stands on the brink of a major war.")
+            st.session_state.last_success_message = "You chose to escalate the conflict!"
+            st.session_state.last_info_messages = [
+                "This decision will have far-reaching consequences.",
+                "The world stands on the brink of a major war."
+            ]
         elif choice == 1:  # Gradual withdrawal
             st.session_state.diplomatic_points -= 3
             st.session_state.global_tension -= 15
             st.session_state.public_opinion += 10
-            st.success("You began a gradual withdrawal!")
-            st.info("This preserves some honor while ending the conflict.")
-            st.info("The war comes to a close, but at what cost?")
+            st.session_state.last_success_message = "You began a gradual withdrawal!"
+            st.session_state.last_info_messages = [
+                "This preserves some honor while ending the conflict.",
+                "The war comes to a close, but at what cost?"
+            ]
         elif choice == 2:  # Diplomatic solution
             st.session_state.diplomatic_points -= 2
             st.session_state.global_tension -= 10
             st.session_state.public_opinion += 15
-            st.success("You sought a diplomatic solution!")
-            st.info("This shows wisdom and restraint.")
-            st.info("The world breathes a sigh of relief.")
+            st.session_state.last_success_message = "You sought a diplomatic solution!"
+            st.session_state.last_info_messages = [
+                "This shows wisdom and restraint.",
+                "The world breathes a sigh of relief."
+            ]
         elif choice == 3:  # Containment
             st.session_state.diplomatic_points -= 4
             st.session_state.global_tension += 5
             st.session_state.public_opinion -= 5
-            st.success("You focused on containment!")
-            st.info("This limits the conflict but prolongs the suffering.")
-            st.info("The war continues, but in a more controlled manner.")
+            st.session_state.last_success_message = "You focused on containment!"
+            st.session_state.last_info_messages = [
+                "This limits the conflict but prolongs the suffering.",
+                "The war continues, but in a more controlled manner."
+            ]
         
-        st.info("The Cold War continues, but your decisions have shaped its course.")
+        st.session_state.last_info_messages.append("The Cold War continues, but your decisions have shaped its course.")
         st.session_state.game_over = True
 
 def main():
@@ -345,10 +395,24 @@ def main():
             else:
                 st.rerun()
         
+        # Display last success and info messages if they exist
+        if st.session_state.last_success_message:
+            st.success(st.session_state.last_success_message)
+        for message in st.session_state.last_info_messages:
+            st.info(message)
+        
         # Show Return Home button if game is over
         if st.session_state.game_over:
             st.markdown("### Game Over!")
-            st.markdown("Your decisions have led to this outcome. The Cold War continues, but your leadership has ended.")
+            if st.session_state.global_tension >= 100:
+                st.error("The Cold War turned hot! Global tension reached critical levels, leading to nuclear war. Your leadership failed to maintain peace.")
+            elif st.session_state.public_opinion <= 0:
+                st.error("The public has lost all faith in your leadership! Your approval ratings have plummeted to zero, forcing you to step down.")
+            elif st.session_state.diplomatic_points <= 0:
+                st.error("You've run out of diplomatic leverage! Without any diplomatic points, you can no longer influence international affairs effectively.")
+            else:
+                st.markdown("Your decisions have led to this outcome. The Cold War continues, but your leadership has ended.")
+            
             if st.button("Return Home"):
                 st.session_state.current_scenario = None
                 st.rerun()
